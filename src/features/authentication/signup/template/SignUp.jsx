@@ -7,10 +7,16 @@ import colors from "../../../../values/colors";
 import { CommonImage } from "../../../../assets/images";
 import { Icons } from "../../../../assets/icons";
 import styles from "../signUpStyles";
+import axios from '../../../../config/axiosConfig'; // Nhập Axios từ cấu hình
+import { showMessage } from "react-native-flash-message"; // Import showMessage
+import { useDispatch } from "react-redux";
+import { setAccount } from "../../../../store/userSlice"; // Sử dụng setAccount từ slice
 
-const SignUp = ({ toggleShowPass, showPass, navigation }) => {
+const SignUp = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   // Bước 1: Tạo state để lưu trữ thông tin đăng ký
-  const [account, setAccount] = useState({
+  const [account, setAccountState] = useState({
     username: "",
     password: "",
     firstName: "",
@@ -18,23 +24,83 @@ const SignUp = ({ toggleShowPass, showPass, navigation }) => {
     role: "user", // Mặc định là "user"
   });
 
+  const [showPass, setShowPass] = useState(false); // Thêm state cho hiện/ẩn mật khẩu
+
   // Bước 2: Xử lý sự kiện khi người dùng nhập thông tin
   const handleInputChange = (field, value) => {
-    setAccount((prevState) => ({
+    setAccountState((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
 
+  // Hàm toggle để hiện/ẩn mật khẩu
+  const toggleShowPass = () => {
+    setShowPass((prev) => !prev);
+  };
+
   // Bước 3: Xử lý khi người dùng nhấn nút "ĐĂNG KÝ"
-  const onSubmitSignUp = useCallback(() => {
-    console.log("Thông tin tài khoản đăng ký:", account);
-    // Bạn có thể thực hiện gọi API đăng ký tại đây
-  }, [account]);
+  const onSubmitSignUp = useCallback(async () => {
+    // Kiểm tra email có đúng định dạng hay không
+    const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
+    // Kiểm tra các trường thông tin
+    if (!account.firstName || !account.lastName || !account.username || !account.password) {
+      // Hiển thị thông báo khi có trường bị bỏ trống
+      showMessage({
+        message: "Vui lòng điền đầy đủ thông tin!",
+        type: "danger",
+      });
+      return;
+    }
+
+    if (!isValidEmail(account.username)) {
+      // Hiển thị thông báo khi email không đúng định dạng
+      showMessage({
+        message: "Email không đúng định dạng!",
+        type: "danger",
+      });
+      return;
+    }
+
+    try {
+      // Gửi yêu cầu đăng ký đến API
+      const response = await axios.post('/identityusers/register', account);
+      console.log(response.data.isSuccess);
+
+      if (response.data.isSuccess) {
+        // Gọi thông báo thành công
+        showMessage({
+          message: "Đăng ký thành công!",
+          type: "success",
+          backgroundColor: colors.primary_green
+        });
+
+        // Chuyển hướng đến trang Đăng Nhập
+        navigation.navigate("Login");
+      } else {
+        // Hiển thị thông báo nếu không thành công
+        showMessage({
+          message: response.data.message || "Đăng ký không thành công.",
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi đăng ký:", error.response ? error.response.data : error.message);
+      // Hiển thị lỗi nếu có
+      showMessage({
+        message: "Lỗi đăng ký, vui lòng thử lại!",
+        type: "danger",
+      });
+    }
+  }, [account, dispatch, navigation]);
 
   const navigateToLogin = useCallback(() => {
     navigation.navigate("Login");
-  }, []);
+  }, [navigation]);
 
   return (
     <SafeAreaView style={generalStyles.container}>
@@ -70,8 +136,8 @@ const SignUp = ({ toggleShowPass, showPass, navigation }) => {
             rightIcon={
               showPass ? Icons.iconShowPassword : Icons.iconHidePassword
             }
-            onPressRightIcon={toggleShowPass}
-            secureTextEntry={showPass}
+            onPressRightIcon={toggleShowPass} // Gọi hàm toggle khi nhấn vào biểu tượng
+            secureTextEntry={!showPass} // Thay đổi giá trị secureTextEntry
             onChangeText={(text) => handleInputChange("password", text)}
             borderColor={colors.primary_green}
           />
@@ -80,7 +146,7 @@ const SignUp = ({ toggleShowPass, showPass, navigation }) => {
           style={styles.btnContinue}
           text={"ĐĂNG KÝ"}
           textStyle={styles.btnText}
-          onPress={onSubmitSignUp}
+          onPress={onSubmitSignUp} // Gọi hàm đăng ký khi nhấn nút
           backgroundColor={colors.white}
         />
         <View style={generalStyles.flexRow}>

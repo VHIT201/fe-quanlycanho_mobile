@@ -9,6 +9,7 @@ import * as SplashScreen from 'expo-splash-screen'; // Import SplashScreen
 import Intro from './src/features/authentication/intro/template/Intro';
 import Login from './src/features/authentication/login/template/Login';
 import SignUp from './src/features/authentication/signup/template/SignUp';
+import AddBuidling from './src/features/building/addBuilding/AddBuidling';
 import colors from './src/values/colors';
 import Home from './src/features/home/template/Home';
 import Building from './src/features/building/template/Building';
@@ -17,6 +18,7 @@ import CashFlow from './src/features/cashflow/template/CashFlow';
 import Management from './src/features/management/template/Management';
 import useCustomFonts from './src/assets/fonts/useFont';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import FlashMessage from "react-native-flash-message"; // Import FlashMessage
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,8 +81,7 @@ const BottomTabs = () => {
         tabBarStyle: { height: 70, paddingBottom: 10 }, // Tăng chiều cao của BottomTab
         tabBarLabelStyle: { fontSize: 13 },
         headerShown: false,
-      })}
-    >
+      })}>
       <Tab.Screen name="Main" component={Home} options={{ tabBarLabel: 'Trang chủ' }} />
       <Tab.Screen name="Building" component={Building} options={{ tabBarLabel: 'Tòa nhà' }} />
       <Tab.Screen name="Message" component={Message} options={{ tabBarLabel: 'Tin nhắn' }} />
@@ -115,8 +116,29 @@ const App = () => {
           <Stack.Screen name="Intro" component={Intro} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen 
+            name="AddBuilding" 
+            component={AddBuidling}
+            options={{
+              cardStyleInterpolator: ({ current, layouts }) => {
+                return {
+                  cardStyle: {
+                    transform: [
+                      {
+                        translateY: current.progress.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [layouts.screen.height, 0], // Di chuyển từ dưới lên
+                        }),
+                      },
+                    ],
+                  },
+                };
+              },
+            }}
+          />
           <Stack.Screen name="Home" component={BottomTabs} />
         </Stack.Navigator>
+        <FlashMessage position="top" /> 
       </NavigationContainer>
     </Provider>
   );
