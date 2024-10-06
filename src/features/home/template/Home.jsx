@@ -6,7 +6,9 @@ import homeStyles from "../homeStyles";
 import colors from "../../../values/colors";
 import Modal from "../../../components/Modal";
 import InfoSection from "../../../components/InfoSection/index";
+import { useSelector } from "react-redux";
 const Home = props => {
+  
   const infoData = [
     [
       { label: 'Số tòa nhà', value: '15' },

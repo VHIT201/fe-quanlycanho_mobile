@@ -8,14 +8,14 @@ export const saveToken = createAsyncThunk(
   'user/saveToken',
   async (token) => {
     await AsyncStorage.setItem('userToken', token); // Lưu token vào AsyncStorage
-    return token; // Trả về token để cập nhật state
+    return token; 
   }
 );
 
 export const removeToken = createAsyncThunk(
   'user/removeToken',
   async () => {
-    await AsyncStorage.removeItem('userToken'); // Xóa token khỏi AsyncStorage
+    await AsyncStorage.removeItem('userToken'); 
   }
 );
 
@@ -23,11 +23,15 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     userInfo: null,
+    userAccount:null,
     token: null,
     loading: false,
     error: null,
   },
   reducers: {
+    setAccount(state, action) {
+      state.userAccount = action.payload.userAccount;
+    },
     setUser(state, action) {
       state.userInfo = action.payload.userInfo; // Lưu thông tin người dùng
       state.token = action.payload.token; // Lưu token
@@ -57,7 +61,7 @@ const userSlice = createSlice({
 });
 
 // Xuất các action
-export const { setUser, setLoading, setError, resetUser } = userSlice.actions;
+export const { setUser, setLoading, setError, resetUser, setAccount } = userSlice.actions;
 
 // Xuất reducer
 export default userSlice.reducer;
