@@ -68,7 +68,7 @@ const citiesData = [
   },
 ];
 
-const Building = () => {
+const Building = ({navigation}) => {
   const [expandedCities, setExpandedCities] = useState(new Set());
 
   // Xử lý khi người dùng nhấn vào tên thành phố để mở rộng hoặc thu gọn danh sách tòa nhà
@@ -125,6 +125,7 @@ const Building = () => {
         ))}
       </ScrollView>
       <TouchableOpacity
+      onPress={()=> navigation.navigate('AddBuilding')}
         style={{
           height: 60,
           width: 60,
