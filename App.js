@@ -116,26 +116,7 @@ const App = () => {
           <Stack.Screen name="Intro" component={Intro} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen 
-            name="AddBuilding" 
-            component={AddBuidling}
-            options={{
-              cardStyleInterpolator: ({ current, layouts }) => {
-                return {
-                  cardStyle: {
-                    transform: [
-                      {
-                        translateY: current.progress.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [layouts.screen.height, 0], // Di chuyển từ dưới lên
-                        }),
-                      },
-                    ],
-                  },
-                };
-              },
-            }}
-          />
+          <Stack.Screen name="AddBuilding" component={AddBuidling} />
           <Stack.Screen name="Home" component={BottomTabs} />
         </Stack.Navigator>
         <FlashMessage position="top" /> 
