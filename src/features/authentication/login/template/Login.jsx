@@ -15,8 +15,8 @@ import { showMessage } from "react-native-flash-message"; // Import showMessage
 import Spinner from '../../../../components/Spinner/Spinner';
 
 const Login = ({ navigation }) => {
-  const [username, setUsername] = useState(''); // State cho username
-  const [password, setPassword] = useState(''); // State cho password
+  const [username, setUsername] = useState('vanhoangit2001@gmail.com'); // State cho username
+  const [password, setPassword] = useState('Hoang2001'); // State cho password
   const [loading, setLoading] = useState(false); // State cho loading
   const dispatch = useDispatch(); // Hook để truy cập dispatch
 
