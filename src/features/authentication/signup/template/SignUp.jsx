@@ -21,6 +21,7 @@ const SignUp = ({ navigation }) => {
     password: "",
     firstName: "",
     lastName: "",
+    email:"",
     role: "user", // Mặc định là "user"
   });
 
@@ -48,7 +49,7 @@ const SignUp = ({ navigation }) => {
     };
 
     // Kiểm tra các trường thông tin
-    if (!account.firstName || !account.lastName || !account.username || !account.password) {
+    if (!account.firstName || !account.lastName || !account.username || !account.password || !account.email) {
       // Hiển thị thông báo khi có trường bị bỏ trống
       showMessage({
         message: "Vui lòng điền đầy đủ thông tin!",
@@ -57,7 +58,7 @@ const SignUp = ({ navigation }) => {
       return;
     }
 
-    if (!isValidEmail(account.username)) {
+    if (!isValidEmail(account.email)) {
       // Hiển thị thông báo khi email không đúng định dạng
       showMessage({
         message: "Email không đúng định dạng!",
@@ -107,7 +108,7 @@ const SignUp = ({ navigation }) => {
       <View style={[generalStyles.centerView, styles.topContainer]}>
         <Image source={CommonImage.LogoDefault} style={styles.logo} />
         <View style={styles.inputContainer}>
-          <TextInputComponent
+        <TextInputComponent
             style={{ color: colors.primary_green }}
             styleAreaInput={styles.input}
             placeholder={"Họ"}
@@ -121,15 +122,23 @@ const SignUp = ({ navigation }) => {
             onChangeText={(text) => handleInputChange("lastName", text)}
             borderColor={colors.primary_green}
           />
-          <TextInputComponent
+        <TextInputComponent
             style={{ color: colors.primary_green }}
             styleAreaInput={styles.input}
-            placeholder={"Nhập email của bạn"}
+            placeholder={"Username"}
             keyboardType="email-address"
             onChangeText={(text) => handleInputChange("username", text)}
             borderColor={colors.primary_green}
           />
           <TextInputComponent
+            style={{ color: colors.primary_green }}
+            styleAreaInput={styles.input}
+            placeholder={"Nhập email của bạn"}
+            keyboardType="email-address"
+            onChangeText={(text) => handleInputChange("email", text)}
+            borderColor={colors.primary_green}
+          />
+                    <TextInputComponent
             style={{ color: colors.primary_green }}
             styleAreaInput={styles.input}
             placeholder={"Mật khẩu"}
@@ -141,6 +150,9 @@ const SignUp = ({ navigation }) => {
             onChangeText={(text) => handleInputChange("password", text)}
             borderColor={colors.primary_green}
           />
+
+
+
         </View>
         <ButtonComponent
           style={styles.btnContinue}
