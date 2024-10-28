@@ -25,7 +25,7 @@ const colors = {
     green: '#00d816',
     green0a: '#0abb87',
     greenE0: '#e0f7f0',
-    lightGray: '#E5E5E5',
+    lightGray: '#F5F5F5',
     grey: '#CACACA',
     greyF3: '#F3F3F3',
     royal_blue: '#057DCD',
@@ -38,6 +38,7 @@ const colors = {
     yellow: '#FFFF2E',
     card_gradient: ['#E9EFFF', '#A9BFFA', '#6C81EA'],
     ruby: '#E2294F',
+    green_94 : '#95CA94'
   };
   export default colors;
   

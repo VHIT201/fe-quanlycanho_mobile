@@ -1,31 +1,22 @@
-// components/InfoSection.js
 import React from 'react';
 import { View, Text } from 'react-native';
 import homeStyles from '../../features/home/homeStyles';
 import colors from '../../values/colors';
 
-const InfoSection = ({ data, style }) => {
-
-    // example data
-    // const infoData = [
-    //     [
-    //       { label: 'Số tòa nhà', value: '15' },
-    //       { label: 'Số người thuê', value: '400' },
-    //     ],
-    //     [
-    //       { label: 'Số phòng', value: '440' },
-    //       { label: 'Số phòng trống', value: '25' },
-    //     ],
-    //   ];
+const InfoSection = ({ data, style, numColumns, styleValue, styleLabel }) => {
+  // Tạo mảng con dựa trên số hàng truyền vào
+  const displayedData = data.slice(0, numColumns);
 
   return (
     <View style={[homeStyles.container, style]}>
-      {data.map((column, columnIndex) => (
+      {displayedData.map((column, columnIndex) => (
         <View key={columnIndex} style={homeStyles.columnContainer}>
           {column.map((item, itemIndex) => (
             <View key={itemIndex} style={homeStyles.centeredTextContainer}>
-              <Text style={{ fontWeight: "600", color: colors.primary_green }}>{item.label}</Text>
-              <Text>{item.value}</Text>
+              <Text style={[{ fontWeight: "600", color: colors.primary_green }, styleLabel]}>
+                {item.label}
+              </Text>
+              <Text style={styleValue}>{item.value}</Text>
             </View>
           ))}
         </View>

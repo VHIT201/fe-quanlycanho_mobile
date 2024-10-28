@@ -154,6 +154,7 @@ const Message = props => {
       <Header titleHeader={'Tin nhắn'}/>
       <FlatList
         data={filteredData}
+        style={{paddingHorizontal:10, paddingTop:10}}
         keyExtractor={item => item.id}
         ListHeaderComponent={renderHeader} 
         showsVerticalScrollIndicator={false}
