@@ -15,7 +15,7 @@ const headerStyles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingVertical: 10,
     paddingHorizontal: 5,
-    height: 60,
+    height: 50,
     alignItems: 'center',
   },
 });

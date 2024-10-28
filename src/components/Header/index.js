@@ -13,13 +13,13 @@ const Header = ({titleHeader, leftIcon, rightIcon}) => {  // Thêm props titleHe
   return (
     <SafeAreaView>
       <View style={[generalStyles.flexRow, headerStyles.headerView]}>
-        <View style={{...generalStyles.flexRow, flex: 1}}>
+        <View style={{...generalStyles.flexRow, flex: 1, paddingLeft:10}}>
           {leftIcon}
         </View>
         <View style={{...generalStyles.centerView, flex: 5}}>
             <Text style={{fontWeight:'600', color:colors.black, fontFamily:fontFamily.bold, fontSize:16}}>{titleHeader}</Text>
         </View>
-        <View style={{...generalStyles.flexRow, flex: 1, gap:10}}>
+        <View style={{...generalStyles.flexRow, flex: 1, alignItems:"flex-end", justifyContent:"flex-end", paddingRight:10 }}>
           {rightIcon}
         </View>
       </View>
