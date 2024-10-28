@@ -7,7 +7,7 @@ import colors from "../../../values/colors";
 import Modal from "../../../components/Modal";
 import InfoSection from "../../../components/InfoSection/index";
 import { useSelector } from "react-redux";
-const Home = props => {
+const Home = ({navigation}) => {
   
   const infoData = [
     [
@@ -35,13 +35,13 @@ const Home = props => {
         </View>
       {/* Thông tin chung */}
 
-        <InfoSection style={{position:"absolute", zIndex:10, top:'8%'}} data={infoData} />
+        <InfoSection style={{position:"absolute", zIndex:10, top:'8%'}} data={infoData} numColumns={2}/>
 
 
       <View style={[homeStyles.containerColumn, { gap: 40, position:"absolute", top:'28%', }]}>
         {[
           [
-            { icon: Icons.iconService, label: 'Dịch vụ' },
+            { icon: Icons.iconService, label: 'Dịch vụ', navigate: 'Services' },
             { icon: Icons.iconPipe, label: 'Chốt điện nước' },
             { icon: Icons.iconInvoice, label: 'Hóa đơn' },
           ],
@@ -58,7 +58,7 @@ const Home = props => {
         ].map((row, rowIndex) => (
           <View key={rowIndex} style={homeStyles.flexRow}>
             {row.map((item, itemIndex) => (
-              <TouchableOpacity key={itemIndex} style={homeStyles.iconButtonContainer}>
+              <TouchableOpacity onPress={()=>navigation.navigate(item.navigate)} key={itemIndex} style={homeStyles.iconButtonContainer}>
                 <Image style={{ height: 40, width: 40 }} source={item.icon} />
                 <Text style={{fontWeight:"500"}}>{item.label}</Text>
               </TouchableOpacity>

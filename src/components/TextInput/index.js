@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {HelperText} from 'react-native-paper';
+import { HelperText } from 'react-native-paper';
 import colors from '../../values/colors';
+import { fontFamily } from '../../assets/fonts/useFont';
+
 const TextInputComponent = ({
   placeholder,
   style,
@@ -40,6 +42,8 @@ const TextInputComponent = ({
   onContentSizeChange,
   borderRadius
 }) => {
+  const [isFocused, setIsFocused] = useState(false); // Trạng thái focus
+
   return (
     <View style={stylesTextInput.container}>
       {label && (
@@ -48,16 +52,16 @@ const TextInputComponent = ({
             children={`${label}`}
             style={[stylesTextInput.textLabel, styleLabel]}
           />
-          {require && <Text children={' *'} style={{color: colors.red}} />}
+          {require && <Text children={' *'} style={{ color: colors.red }} />}
         </View>
       )}
       <View
         style={[
           noBorder
             ? stylesTextInput.containerAreaInputNoBorder
-            : [stylesTextInput.containerAreaInput,{borderRadius : borderRadius}],
+            : [stylesTextInput.containerAreaInput, { borderRadius: borderRadius }],
           styleAreaInput,
-          {borderColor: borderColor},
+          { borderColor: isFocused ? colors.primary_green : borderColor }, // Thay đổi màu viền
         ]}>
         {leftIcon && (
           <TouchableOpacity
@@ -69,17 +73,20 @@ const TextInputComponent = ({
           </TouchableOpacity>
         )}
         <TextInput
-          style={[stylesTextInput.textInput, style]}
+          style={[stylesTextInput.textInput, { fontFamily: fontFamily.regular }, style]} // Thêm fontFamily
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor ?? colors.grayC4}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           onChangeText={onChangeText}
-          onBlur={onBlur}
+          onBlur={() => {
+            setIsFocused(false); // Đặt trạng thái không focus khi mất focus
+            onBlur && onBlur();
+          }}
           value={value}
           secureTextEntry={secureTextEntry}
           maxLength={maxLength}
-          onFocus={onFocus}
+          onFocus={() => setIsFocused(true)} // Đặt trạng thái focus khi được focus
           editable={!disable}
           autoComplete={autoCompleteType}
           multiline={multiline}
@@ -103,6 +110,7 @@ const TextInputComponent = ({
     </View>
   );
 };
+
 const stylesTextInput = StyleSheet.create({
   container: {
     width: '100%',
@@ -113,7 +121,6 @@ const stylesTextInput = StyleSheet.create({
     alignItems: 'center',
     height: 40,
     width: '100%',
-
     marginTop: 5,
     paddingHorizontal: 8,
     paddingRight: 12,
@@ -126,11 +133,9 @@ const stylesTextInput = StyleSheet.create({
     alignItems: 'center',
     height: 40,
     width: '100%',
-
     marginTop: 5,
     paddingHorizontal: 8,
     paddingRight: 12,
-    // borderBottomWidth: 0.2,
   },
   icon: {
     width: 20,
@@ -138,14 +143,13 @@ const stylesTextInput = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    color: colors.royal_blue,
-    // marginLeft: 10,
+    color: colors.black,
     height: 40,
   },
   textLabel: {
     color: colors.black1,
     fontSize: 16,
-    fontFamily: 'SegoeUI',
+    fontFamily: fontFamily.regular
   },
   leftIcon: {
     height: 50,
@@ -157,4 +161,5 @@ const stylesTextInput = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
 export default TextInputComponent;

@@ -1,7 +1,7 @@
 // src/features/authentication/login/template/Login.js
 
 import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import generalStyles from '../../../../styles/generalStyles';
 import colors from '../../../../values/colors';
 import { CommonImage } from '../../../../assets/images';
@@ -10,17 +10,26 @@ import loginStyles from '../loginStyles';
 import ButtonComponent from '../../../../components/Button';
 import axios from '../../../../config/axiosConfig';
 import { useDispatch } from 'react-redux';
-import { setAccount, saveToken } from '../../../../store/userSlice'; // Import action để lưu thông tin người dùng
+import { setAccount, saveToken, removeToken } from '../../../../store/userSlice'; // Import action để lưu thông tin người dùng
 import { showMessage } from "react-native-flash-message"; // Import showMessage
 import Spinner from '../../../../components/Spinner/Spinner';
+import { getTokenFromAsyncStorage } from '../../../../utils/asyncStorageHelper';
 
 const Login = ({ navigation }) => {
-  const [username, setUsername] = useState(''); // State cho username
-  const [password, setPassword] = useState(''); // State cho password
+  const [username, setUsername] = useState('vanhoangit2001@gmail.com'); // State cho username
+  const [password, setPassword] = useState('Hoang2001'); // State cho password
   const [loading, setLoading] = useState(false); // State cho loading
   const dispatch = useDispatch(); // Hook để truy cập dispatch
 
-  const handleLogin = async () => { // Không cần tham số navigation ở đây
+
+  useEffect(() => {
+    dispatch(removeToken());
+  }, []);
+
+
+  const handleLogin = async () => {
+
+    // Kiểm tra xem username và password có hợp lệ không
     if (!username || !password) {
       showMessage({
         message: "Vui lòng nhập email và mật khẩu.",
@@ -28,34 +37,39 @@ const Login = ({ navigation }) => {
       });
       return;
     }
-
+  
     setLoading(true); // Bắt đầu loading
-
+  
     try {
+      // Xóa token trước khi thực hiện đăng nhập
+
+  
+      // Gửi yêu cầu đăng nhập
       const response = await axios.post('identityusers/login', {
         username,
         password,
         role: 'user',
       });
-
+  
       setLoading(false); // Kết thúc loading
-
+  
+      // Kiểm tra phản hồi từ server
       if (response.data.isSuccess) {
         dispatch(setAccount({ userAccount: { username, password } }));
         dispatch(saveToken(response.data.data));
-
+  
         // Gọi thông báo thành công
         showMessage({
           message: "Đăng nhập thành công!",
           type: "success",
           backgroundColor: colors.primary_green,
         });
-
+  
         // Chuyển trang sau 1 giây
         setTimeout(() => {
           navigation.navigate('Home'); // Chuyển đến trang Home
         }, 1000); // 1000 ms = 1 giây
-
+  
       } else {
         // Gọi thông báo lỗi nếu không thành công
         showMessage({
@@ -72,6 +86,7 @@ const Login = ({ navigation }) => {
       });
     }
   };
+  
 
   return (
     <SafeAreaView style={[generalStyles.container,{position: 'relative'}]}>

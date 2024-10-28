@@ -16,10 +16,15 @@ import Building from './src/features/building/template/Building';
 import Message from './src/features/message/template/Message';
 import CashFlow from './src/features/cashflow/template/CashFlow';
 import Management from './src/features/management/template/Management';
+import AddRoom from './src/features/building/addRoom/AddRoom';
+import DetailRoom from './src/features/building/detailRoom/DetailRoom';
+import Services from './src/features/services/Services';
+
+
 import useCustomFonts from './src/assets/fonts/useFont';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FlashMessage from "react-native-flash-message"; // Import FlashMessage
-
+import DetailBuilding from './src/features/building/detailBuilding/template/DetailBuilding';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -116,27 +121,12 @@ const App = () => {
           <Stack.Screen name="Intro" component={Intro} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen 
-            name="AddBuilding" 
-            component={AddBuidling}
-            options={{
-              cardStyleInterpolator: ({ current, layouts }) => {
-                return {
-                  cardStyle: {
-                    transform: [
-                      {
-                        translateY: current.progress.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [layouts.screen.height, 0], // Di chuyển từ dưới lên
-                        }),
-                      },
-                    ],
-                  },
-                };
-              },
-            }}
-          />
+          <Stack.Screen name="AddBuilding" component={AddBuidling} />
+          <Stack.Screen name="AddRoom" component={AddRoom} />
           <Stack.Screen name="Home" component={BottomTabs} />
+          <Stack.Screen name="DetailBuilding" component={DetailBuilding} />
+          <Stack.Screen name="DetailRoom" component={DetailRoom} />
+          <Stack.Screen name="Services" component={Services} />
         </Stack.Navigator>
         <FlashMessage position="top" /> 
       </NavigationContainer>

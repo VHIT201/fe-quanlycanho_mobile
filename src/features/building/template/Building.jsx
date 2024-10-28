@@ -1,77 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import generalStyles from "../../../styles/generalStyles";
 import BuildingButton from "../../../components/BuildingButton";
 import styles from "../buildingStyles";
 import colors from "../../../values/colors";
-import { Icons } from "../../../assets/icons";
 import Header from "../../../components/Header";
+import axios from "../../../config/axiosConfig";
+import { useFocusEffect } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBuildings } from "../../../services/buildingServies";
+import { Icons } from "../../../assets/icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import FontAweSome5 from "react-native-vector-icons/FontAwesome5";
+import { setBuilding } from "../../../store/buildingSlice";
 
-// Dữ liệu các khu vực của từng thành phố
-const citiesData = [
-  {
-    name: "Đồng Nai",
-    buildings: [
-      {
-        imageSource:
-          "https://www.phatdat.com.vn/wp-content/uploads/2024/07/VIEW-NIGHT-LIGHTING-1024x576.jpg",
-        title: "Khu Văn Phòng 1",
-        address: "Số 123, Đường Nguyễn Văn Cừ, Quận 1, TP.HCM",
-      },
-      {
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng 2",
-        address: "Số 124, Đường Nguyễn Văn Cừ, Quận 1, TP.HCM",
-      },
-      {
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng 3",
-        address: "Số 125, Đường Nguyễn Văn Cừ, Quận 1, TP.HCM",
-      },
-      {
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng 4",
-        address: "Số 126, Đường Nguyễn Văn Cừ, Quận 1, TP.HCM",
-      },
-    ],
-  },
-  {
-    name: "Bình Dương",
-    buildings: [
-      {
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng A",
-        address: "Số 789, Đường Bình Dương, TP.Thủ Dầu Một",
-      },
-      {
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng B",
-        address: "Số 790, Đường Bình Dương, TP.Thủ Dầu Một",
-      },
-    ],
-  },
-  {
-    name: "Nha Trang",
-    buildings: [
-      {
-        id:1,
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng X",
-        address: "Số 456, Đường Trần Phú, TP.Nha Trang",
-      },
-      {
-        imageSource: Icons.iconCustom,
-        title: "Khu Văn Phòng Y",
-        address: "Số 457, Đường Trần Phú, TP.Nha Trang",
-      },
-    ],
-  },
-];
-
-const Building = ({navigation}) => {
+const Building = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { listBuilding } = useSelector((state) => state.building);
+  const { loading, error } = useSelector((state) => state.app);
   const [expandedCities, setExpandedCities] = useState(new Set());
 
-  // Xử lý khi người dùng nhấn vào tên thành phố để mở rộng hoặc thu gọn danh sách tòa nhà
   const handleCityPress = (cityName) => {
     setExpandedCities((prev) => {
       const newExpandedCities = new Set(prev);
@@ -84,6 +32,30 @@ const Building = ({navigation}) => {
     });
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBuildings(dispatch); // Gọi hàm fetchBuildings để lấy dữ liệu
+    }, [dispatch])
+  );
+
+  if (loading)
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  // if (error)
+  //   return (
+  //     <View>
+  //       <Text>Error: {error}</Text>
+  //     </View>
+  //   );
+
+  const handleOnpressBuildingItem = (building) => {
+    dispatch(setBuilding({"building" : building}))
+    navigation.navigate("DetailBuilding");
+  };
+
   return (
     <View
       style={[
@@ -91,41 +63,58 @@ const Building = ({navigation}) => {
         { backgroundColor: colors.white, position: "relative" },
       ]}
     >
-      <Header titleHeader={"Tòa nhà"} />
+      <Header
+        leftIcon={
+          <Icon
+            onPress={() => navigation.goBack()}
+            name="chevron-left"
+            size={20}
+            color={colors.light_black}
+          />
+        }
+        titleHeader={"Tòa nhà"}
+        
+      />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Danh sách các thành phố và tòa nhà */}
         <View style={{ height: 10 }}></View>
-        {citiesData.map((city, index) => (
-          <View key={index} style={styles.citySection}>
-            {/* Tiêu đề của thành phố */}
-            <TouchableOpacity
-              onPress={() => handleCityPress(city.name)}
-              style={styles.cityTitleContainer}
-            >
-              <Text style={styles.cityTitle}>
-                {city.name} ({city.buildings.length})
-              </Text>
-            </TouchableOpacity>
+        {listBuilding.length == 0 ? (
+          <Text style={{ textAlign: "center", marginTop: 20 }}>
+            Không có dữ liệu tòa nhà
+          </Text>
+        ) : (
+          listBuilding.map((cityData, index) => (
+            <View key={index} style={styles.citySection}>
+              {/* Tiêu đề của thành phố */}
+              <TouchableOpacity
+                onPress={() => handleCityPress(cityData.city)}
+                style={styles.cityTitleContainer}
+              >
+                <Text style={styles.cityTitle}>
+                  {cityData.city} ({cityData.buildings.length})
+                </Text>
+              </TouchableOpacity>
 
-            {/* Danh sách tòa nhà nếu thành phố được mở rộng */}
-            {expandedCities.has(city.name) && (
-              <View style={styles.buttonContainer}>
-                {city.buildings.map((building, idx) => (
-                  <BuildingButton
-                    key={idx}
-                    containerStyle={{ width: "46%" }}
-                    imageSource={building.imageSource}
-                    title={building.title}
-                    address={building.address}
-                  />
-                ))}
-              </View>
-            )}
-          </View>
-        ))}
+              {/* Danh sách tòa nhà nếu thành phố được mở rộng */}
+              {expandedCities.has(cityData.city) && (
+                <View style={styles.buttonContainer}>
+                  {cityData.buildings.map((building, id) => (
+                    <BuildingButton
+                      key={id}
+                      containerStyle={{ width: "46%" }}
+                      imageSource={Icons.iconCustom} // Hoặc nguồn ảnh khác nếu có
+                      title={building.building_name} // Sử dụng building_name
+                      address={building.address} // Địa chỉ tòa nhà
+                      onPress={() => handleOnpressBuildingItem(building)}
+                    />
+                  ))}
+                </View>
+              )}
+            </View>
+          ))
+        )}
       </ScrollView>
       <TouchableOpacity
-      onPress={()=> navigation.navigate('AddBuilding')}
+        onPress={() => navigation.navigate("AddBuilding")}
         style={{
           height: 60,
           width: 60,
@@ -136,15 +125,14 @@ const Building = ({navigation}) => {
           backgroundColor: colors.primary_green,
           justifyContent: "center",
           alignItems: "center",
-          // Thêm bóng đen
-          shadowColor: "black", // Màu bóng
+          shadowColor: "black",
           shadowOffset: {
             width: 0,
             height: 2,
           },
           shadowOpacity: 0.3,
           shadowRadius: 3.5,
-          elevation: 5, // Thêm độ cao cho Android
+          elevation: 5,
         }}
       >
         <Text style={{ fontSize: 40, fontWeight: "600", color: colors.white }}>
