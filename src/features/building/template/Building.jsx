@@ -113,32 +113,7 @@ const Building = ({ navigation }) => {
           ))
         )}
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("AddBuilding")}
-        style={{
-          height: 60,
-          width: 60,
-          borderRadius: 30,
-          position: "absolute",
-          bottom: "5%",
-          right: "6%",
-          backgroundColor: colors.primary_green,
-          justifyContent: "center",
-          alignItems: "center",
-          shadowColor: "black",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 3.5,
-          elevation: 5,
-        }}
-      >
-        <Text style={{ fontSize: 40, fontWeight: "600", color: colors.white }}>
-          +
-        </Text>
-      </TouchableOpacity>
+
     </View>
   );
 };

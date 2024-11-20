@@ -1,28 +1,58 @@
-import axios from '../config/axiosConfig';
-import { setLoading, setError } from '../store/stateSlice';
-import { setService } from '../store/serviceSlice';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const createService = async (dispatch, serviceData, token) => {
-  dispatch(setLoading(true));
-  try {
-    const response = await axios.post('/service/create', serviceData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+const instance = axios.create({
+  baseURL: 'http://10.0.2.2:5170/api/v1/', // Đặt URL gốc cho API
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': '*/*',
+  },
+});
 
-    if (response.status === 200 || response.status === 201) {
-        // console.log(response.data.data);
-        return response
-    //   dispatch(setService(response.data));
-    } else {
-      dispatch(setError('Lỗi tạo dịch vụ'));
-      console.error('Lỗi tạo dịch vụ', response.data);
+// Thêm interceptor để xử lý request và thêm token vào header
+instance.interceptors.request.use(
+  async (config) => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`; // Thêm token vào header
+      }
+      return config;
+    } catch (error) {
+      console.log('Error retrieving token:', error);
+      return config;
     }
-  } catch (error) {
-    dispatch(setError(error.response?.data?.message || 'Có lỗi xảy ra'));
-    console.error('Lỗi:', error);
-  } finally {
-    dispatch(setLoading(false));
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-};
+);
+
+// Thêm interceptor để xử lý response
+instance.interceptors.response.use(
+  (response) => {
+    // Xử lý response thành công
+    return response;
+  },
+  (error) => {
+    // Xử lý lỗi mà không để React Native hiển thị cảnh báo
+    if (error.response) {
+      // Xử lý khi server phản hồi với lỗi
+      console.log('Error Response:', error.response.data); // Ghi log lỗi
+      console.log('Error Status:', error.response.status); // Ghi log status
+      // Ném lại lỗi để hàm gọi API có thể xử lý
+      return Promise.reject(error); // Ném lại lỗi để tiếp tục xử lý ở nơi gọi
+    } else if (error.request) {
+      // Xử lý khi không nhận được phản hồi từ server
+      console.log('No Response from server');
+      return Promise.reject(new Error('No response from server')); // Ném lại lỗi để tiếp tục xử lý
+    } else {
+      // Xử lý các lỗi khác trong quá trình tạo request
+      console.log('Request Error:', error.message);
+      return Promise.reject(new Error(error.message)); // Ném lại lỗi để tiếp tục xử lý
+    }
+  }
+);
+
+export default instance;

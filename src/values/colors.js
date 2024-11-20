@@ -9,7 +9,7 @@ const colors = {
     purple_blue: '#5d78ff',
     secondary_blue: '#007FE8',
     tertiary_blue: '#005DCE',
-    primary_green: '#04c35c',
+    primary_green: '#001eb4',
     dark_blue: '#00008B',
     bottom_green: '#25E7DB',
     secondary_green: '#00DAB8',

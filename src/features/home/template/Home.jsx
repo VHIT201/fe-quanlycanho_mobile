@@ -9,6 +9,7 @@ import InfoSection from "../../../components/InfoSection/index";
 import { useSelector } from "react-redux";
 const Home = ({navigation}) => {
   
+  const userData = useSelector((state) => state.user.userInfo)
   const infoData = [
     [
       { label: 'Số tòa nhà', value: '15' },
@@ -25,11 +26,11 @@ const Home = ({navigation}) => {
             <View style={{flexDirection:"row", justifyContent:'space-between', alignItems:"center", width:"90%", alignSelf:"center", marginTop:'4%'}}>
                 <View>
                     <Text style={{fontSize:12,color:'white'}}>Xin chào</Text>
-                    <Text style={{color:'white', fontWeight:"600", fontSize:16}}>Phạm Văn Hoàng</Text>
+                    <Text style={{color:'white', fontWeight:"600", fontSize:16}}>{userData.firstName} {userData.lastName}</Text>
                 </View>
                 <View>
-                    <Text style={{fontSize:12,color:'white'}}>Xin chào</Text>
-                    <Text style={{color:'white', fontWeight:"600", fontSize:14}}>Phạm Văn Hoàng</Text>
+                    {/* <Text style={{fontSize:12,color:'white'}}>Xin chào</Text>
+                    <Text style={{color:'white', fontWeight:"600", fontSize:14}}>Phạm Văn Hoàng</Text> */}
                 </View>
             </View>
         </View>
@@ -46,15 +47,14 @@ const Home = ({navigation}) => {
             { icon: Icons.iconInvoice, label: 'Hóa đơn' },
           ],
           [
-            { icon: Icons.iconProfile, label: 'Người thuê' },
-            { icon: Icons.iconAlert, label: 'Sự cố' },
+            { icon: Icons.iconAlert, label: 'Sự cố', navigate: 'Problem'  },
             { icon: Icons.iconContract, label: 'Hợp đồng' },
+            { icon: Icons.iconBill, label: 'Sổ nợ' },
           ],
           [
-            { icon: Icons.iconCoin, label: 'Cọc giữ chỗ' },
-            { icon: Icons.iconBill, label: 'Sổ nợ' },
-            { icon: Icons.iconSale, label: 'Đẩy phòng' },
+            { icon: Icons.iconAlert, label: 'Tòa nhà', navigate: 'Building'  },
           ],
+
         ].map((row, rowIndex) => (
           <View key={rowIndex} style={homeStyles.flexRow}>
             {row.map((item, itemIndex) => (
@@ -66,6 +66,7 @@ const Home = ({navigation}) => {
           </View>
         ))}
       </View>
+
         {/* <Modal
           title={'Thông báo'}
           modalContainerStyle={{height:'100%',borderRadius:0}}
