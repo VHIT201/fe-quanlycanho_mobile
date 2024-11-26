@@ -35,12 +35,14 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: colors.gray,
+    borderColor: colors.primary_green,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     margin: 10,
     fontFamily: 'OpenSans-Regular',
+    borderRadius:20,
+    fontSize:13,
   },
 });
 

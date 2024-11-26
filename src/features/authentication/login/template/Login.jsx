@@ -14,10 +14,12 @@ import { setAccount, saveToken, removeToken } from '../../../../store/userSlice'
 import { showMessage } from "react-native-flash-message"; // Import showMessage
 import Spinner from '../../../../components/Spinner/Spinner';
 import { getTokenFromAsyncStorage } from '../../../../utils/asyncStorageHelper';
+import { getUserInformation } from '../../../../services/userServices';
+import { getAllRoomByUserId } from '../../../../services/userServices';
 
 const Login = ({ navigation }) => {
-  const [username, setUsername] = useState('vanhoangit2001@gmail.com'); // State cho username
-  const [password, setPassword] = useState('Hoang2001'); // State cho password
+  const [username, setUsername] = useState('vanhoangc22001@gmail.com'); // State cho username
+  const [password, setPassword] = useState('RPMS@2024'); // State cho password
   const [loading, setLoading] = useState(false); // State cho loading
   const dispatch = useDispatch(); // Hook để truy cập dispatch
 
@@ -48,14 +50,17 @@ const Login = ({ navigation }) => {
       const response = await axios.post('identityusers/login', {
         username,
         password,
-        role: 'user',
+        role: 'USER',
       });
   
       setLoading(false); // Kết thúc loading
   
       // Kiểm tra phản hồi từ server
       if (response.data.isSuccess) {
+        const res = await getUserInformation(username, dispatch);
+        await getAllRoomByUserId(res.id, dispatch)
         dispatch(setAccount({ userAccount: { username, password } }));
+        
         dispatch(saveToken(response.data.data));
   
         // Gọi thông báo thành công
@@ -137,6 +142,9 @@ const Login = ({ navigation }) => {
         
         <Text style={{ textDecorationLine: 'underline', fontSize: 13, marginTop: 10, color: colors.light_black }}>
           Bạn quên mật khẩu?
+        </Text>
+        <Text onPress={()=> navigation.navigate('HomeGuest')} style={{ textDecorationLine: 'underline', color:colors.primary_green ,fontSize: 13, marginTop: 10 }}>
+          Tiếp tục với tư cách khách
         </Text>
         <View
           style={[

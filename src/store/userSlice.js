@@ -23,7 +23,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     userInfo: null,
-    userAccount:null,
+    userAccount: null,
+    userRoom: [], // Khai báo userRoom là mảng
     token: null,
     loading: false,
     error: null,
@@ -47,6 +48,10 @@ const userSlice = createSlice({
       state.token = null; // Đặt lại token
       state.loading = false; // Đặt lại trạng thái loading
       state.error = null; // Đặt lại thông báo lỗi
+      state.userRoom = []; // Đặt lại mảng userRoom
+    },
+    setUserRoom(state, action) {
+      state.userRoom = action.payload; // Update userRoom with payload data
     },
   },
   extraReducers: (builder) => {
@@ -61,7 +66,7 @@ const userSlice = createSlice({
 });
 
 // Xuất các action
-export const { setUser, setLoading, setError, resetUser, setAccount } = userSlice.actions;
+export const { setUser, setLoading, setError, resetUser, setAccount, setUserRoom } = userSlice.actions;
 
 // Xuất reducer
 export default userSlice.reducer;

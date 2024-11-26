@@ -41,10 +41,10 @@ const DetailBuilding = ({ navigation }) => {
   // Hàm để fetch danh sách phòng
   const getRooms = async () => {
     try {
-      const token = await AsyncStorage.getItem("userToken"); // Lấy token từ AsyncStorage
+      const token = await AsyncStorage.getItem("userToken"); 
       setUserToken(token);
       if (token) {
-        await fetchRoomsByBuildingId(dispatch, token, building.id); // Gọi API với token và id tòa nhà
+        await fetchRoomsByBuildingId(dispatch, token, building.id); 
       } else {
         console.error("Token not found");
         navigation.navigate("Login");
@@ -156,7 +156,7 @@ const DetailBuilding = ({ navigation }) => {
                 paddingVertical: 10,
               }}
             >
-              {listRoom?.map((item) => (
+              {listRoom?.rooms.map((item) => (
                 <RoomItem
                   onPress={()=>handlePressRoomItem(item.id)}
                   key={item.id}

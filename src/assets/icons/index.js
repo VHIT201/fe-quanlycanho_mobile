@@ -51,7 +51,8 @@ const Icons = {
   iconAddPerson : require('./icon_add_user.png'),
   iconPerson : require('./icon_people.png'),
   iconLetter : require('./icon_letter.png'),
-  iconLight : require('./icon_light.png')
+  iconLight : require('./icon_light.png'),
+  icon_building: require('./icons_building.png'),
 };
 const BottomBarIcons = {
   HomeActive: require('./icon_home.png'),

@@ -31,7 +31,6 @@ export const fetchBuildings = async (dispatch) => {
         listBuilding: groupBuildingsByCity(response.data.data),
       })
     );
-    console.log(groupBuildingsByCity(response.data.data));
     dispatch(setLoading(false));
   } catch (error) {
     dispatch(setError("Failed to fetch buildings"));

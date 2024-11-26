@@ -17,7 +17,7 @@ const CustomModal = ({
   onRightIconHeaderPress,
   footer, 
   footerStyle,
-  fullScreen // Biến mới để điều khiển full-screen
+  fullScreen
 }) => {
   const handleClose = useCallback(() => {
     if (onClose) {

@@ -1,30 +1,39 @@
-import React, { useCallback, useEffect } from 'react';
-import { Image, StatusBar } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider } from 'react-redux';
-import { store } from './src/store/store';
-import { BottomBarIcons } from './src/assets/icons';
-import * as SplashScreen from 'expo-splash-screen'; // Import SplashScreen
-import Intro from './src/features/authentication/intro/template/Intro';
-import Login from './src/features/authentication/login/template/Login';
-import SignUp from './src/features/authentication/signup/template/SignUp';
-import AddBuidling from './src/features/building/addBuilding/AddBuidling';
-import colors from './src/values/colors';
-import Home from './src/features/home/template/Home';
-import Building from './src/features/building/template/Building';
-import Message from './src/features/message/template/Message';
-import CashFlow from './src/features/cashflow/template/CashFlow';
-import Management from './src/features/management/template/Management';
-import AddRoom from './src/features/building/addRoom/AddRoom';
-import DetailRoom from './src/features/building/detailRoom/DetailRoom';
-import Services from './src/features/services/Services';
+import React, { useCallback, useEffect } from "react";
+import { Image, StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Provider } from "react-redux";
+import { store } from "./src/store/store";
+import { BottomBarIcons } from "./src/assets/icons";
+import * as SplashScreen from "expo-splash-screen"; // Import SplashScreen
+import Intro from "./src/features/authentication/intro/template/Intro";
+import Login from "./src/features/authentication/login/template/Login";
+import SignUp from "./src/features/authentication/signup/template/SignUp";
+import AddBuidling from "./src/features/building/addBuilding/AddBuidling";
+import colors from "./src/values/colors";
+import Home from "./src/features/home/template/Home";
+import Building from "./src/features/building/template/Building";
+import Message from "./src/features/message/template/Message";
+import CashFlow from "./src/features/cashflow/template/CashFlow";
+import Management from "./src/features/management/template/Management";
+import AddRoom from "./src/features/building/addRoom/AddRoom";
+import DetailRoom from "./src/features/building/detailRoom/DetailRoom";
+import Services from "./src/features/services/Services";
+import Problem from "./src/features/problem/Problem";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import HomeGuest from "./src/features/guest/home/template/HomeGuest";
+import GuestBuilding from "./src/features/guest/HomeBuilding/GuestBuilding";
+import GuestDetailRoom from "./src/features/guest/room/guestDetailRoom";
 
-
-import useCustomFonts from './src/assets/fonts/useFont';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import useCustomFonts from "./src/assets/fonts/useFont";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FlashMessage from "react-native-flash-message"; // Import FlashMessage
-import DetailBuilding from './src/features/building/detailBuilding/template/DetailBuilding';
+import DetailBuilding from "./src/features/building/detailBuilding/template/DetailBuilding";
+import GuestDetailBuilding from "./src/features/guest/HomeBuilding/GuestDetailBuilding";
+import CreateBooking from "./src/features/guest/room/createBooking";
+import Invoice from "./src/features/avoice/template";
+import WebViewScreen from "./src/features/avoice/components/WebViewScreen";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -49,49 +58,100 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           switch (route.name) {
-            case 'Home':
+            case "Home":
               return focused ? (
-                <Image source={BottomBarIcons.HomeActive} style={{ width: 30, height: 30 }} />
+                <Image
+                  source={BottomBarIcons.BuildingActive}
+                  style={{ width: 30, height: 30 }}
+                />
               ) : (
-                <Image source={BottomBarIcons.HomeNotActive} style={{ width: 30, height: 30 }} />
+                <Image
+                  source={BottomBarIcons.HomeNotActive}
+                  style={{ width: 30, height: 30 }}
+                />
               );
-            case 'Building':
+            case "Building":
               return focused ? (
-                <Image source={BottomBarIcons.BuildingActive} style={{ width: 30, height: 30 }} />
+                <Image
+                  source={BottomBarIcons.BuildingActive}
+                  style={{ width: 30, height: 30 }}
+                />
               ) : (
-                <Image source={BottomBarIcons.BuildingNonActive} style={{ width: 30, height: 30 }} />
+                <Image
+                  source={BottomBarIcons.BuildingNonActive}
+                  style={{ width: 30, height: 30 }}
+                />
               );
-            case 'Message':
+            case "Message":
               return focused ? (
-                <Image source={BottomBarIcons.ChatActive} style={{ width: 20, height: 20 }} />
+                <Image
+                  source={BottomBarIcons.ChatActive}
+                  style={{ width: 20, height: 20 }}
+                />
               ) : (
-                <Image source={BottomBarIcons.ChatNonActive} style={{ width: 20, height: 20 }} />
+                <Image
+                  source={BottomBarIcons.ChatNonActive}
+                  style={{ width: 20, height: 20 }}
+                />
               );
-            case 'CashFlow':
+            case "CashFlow":
               return focused ? (
-                <Image source={BottomBarIcons.WalletActive} style={{ width: 20, height: 20 }} />
+                <Image
+                  source={BottomBarIcons.WalletActive}
+                  style={{ width: 20, height: 20 }}
+                />
               ) : (
-                <Image source={BottomBarIcons.WalletNoActive} style={{ width: 20, height: 20 }} />
+                <Image
+                  source={BottomBarIcons.WalletNoActive}
+                  style={{ width: 20, height: 20 }}
+                />
               );
-            case 'Management':
+            case "Management":
               return focused ? (
-                <Image source={BottomBarIcons.ManagementAct} style={{ width: 20, height: 20 }} />
+                <Image
+                  source={BottomBarIcons.ManagementAct}
+                  style={{ width: 20, height: 20 }}
+                />
               ) : (
-                <Image source={BottomBarIcons.ManagementNoAct} style={{ width: 20, height: 20 }} />
+                <Image
+                  source={BottomBarIcons.ManagementNoAct}
+                  style={{ width: 20, height: 20 }}
+                />
               );
           }
         },
         tabBarActiveTintColor: colors.primary_green,
         tabBarInactiveTintColor: colors.gray,
-        tabBarStyle: { height: 70, paddingBottom: 10 }, // Tăng chiều cao của BottomTab
+        tabBarStyle: { height: 60, paddingBottom: 5 }, // Tăng chiều cao của BottomTab
         tabBarLabelStyle: { fontSize: 13 },
         headerShown: false,
-      })}>
-      <Tab.Screen name="Main" component={Home} options={{ tabBarLabel: 'Trang chủ' }} />
-      <Tab.Screen name="Building" component={Building} options={{ tabBarLabel: 'Tòa nhà' }} />
-      <Tab.Screen name="Message" component={Message} options={{ tabBarLabel: 'Tin nhắn' }} />
-      <Tab.Screen name="CashFlow" component={CashFlow} options={{ tabBarLabel: 'Thu chi' }} />
-      <Tab.Screen name="Management" component={Management} options={{ tabBarLabel: 'Quản lý' }} />
+      })}
+    >
+      <Tab.Screen
+        name="Main"
+        component={Home}
+        options={{ tabBarLabel: "Trang chủ" }}
+      />
+      {/* <Tab.Screen
+        name="Building"
+        component={Building}
+        options={{ tabBarLabel: "Tòa nhà" }}
+      /> */}
+      <Tab.Screen
+        name="Message"
+        component={Message}
+        options={{ tabBarLabel: "Tin nhắn" }}
+      />
+      {/* <Tab.Screen
+        name="CashFlow"
+        component={CashFlow}
+        options={{ tabBarLabel: "Thu chi" }}
+      /> */}
+      <Tab.Screen
+        name="Management"
+        component={Management}
+        options={{ tabBarLabel: "Quản lý" }}
+      />
     </Tab.Navigator>
   );
 };
@@ -115,21 +175,38 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <StatusBar barStyle="dark-content" backgroundColor={colors.primary_green} />
-        <Stack.Navigator initialRouteName="Intro" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Intro" component={Intro} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="AddBuilding" component={AddBuidling} />
-          <Stack.Screen name="AddRoom" component={AddRoom} />
-          <Stack.Screen name="Home" component={BottomTabs} />
-          <Stack.Screen name="DetailBuilding" component={DetailBuilding} />
-          <Stack.Screen name="DetailRoom" component={DetailRoom} />
-          <Stack.Screen name="Services" component={Services} />
-        </Stack.Navigator>
-        <FlashMessage position="top" /> 
-      </NavigationContainer>
+      <GestureHandlerRootView style={{ flex: 1, width: "100%" }}>
+        <NavigationContainer>
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor={colors.primary_green}
+          />
+          <Stack.Navigator
+            initialRouteName="Intro"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Intro" component={Intro} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="AddBuilding" component={AddBuidling} />
+            <Stack.Screen name="AddRoom" component={AddRoom} />
+            <Stack.Screen name="Home" component={BottomTabs} />
+            <Stack.Screen name="DetailBuilding" component={DetailBuilding} />
+            <Stack.Screen name="DetailRoom" component={DetailRoom} />
+            <Stack.Screen name="Services" component={Services} />
+            <Stack.Screen name="Problem" component={Problem} />
+            <Stack.Screen name="Building" component={Building} />
+            <Stack.Screen name="HomeGuest" component={HomeGuest} />
+            <Stack.Screen name="GuestBuilding" component={GuestBuilding} />
+            <Stack.Screen name="GuestDetailBuilding" component={GuestDetailBuilding} />
+            <Stack.Screen name="GuestDetailRoom" component={GuestDetailRoom} />
+            <Stack.Screen name="CreateBooking" component={CreateBooking} />
+            <Stack.Screen name="Invoice" component={Invoice} />
+            <Stack.Screen name="WebViewScreen" component={WebViewScreen} />
+          </Stack.Navigator>
+          <FlashMessage position="top" />
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </Provider>
   );
 };
