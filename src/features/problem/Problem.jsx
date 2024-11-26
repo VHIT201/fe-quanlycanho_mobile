@@ -19,7 +19,6 @@ import { getAllRoomByUserId } from "../../services/userServices";
 import { getAllProblem } from "../../services/problemServices";
 import { showMessage } from "react-native-flash-message";
 import { useFocusEffect } from "@react-navigation/native"; // Import useFocusEffect
-import { Swipeable } from "react-native-gesture-handler";
 
 const Problem = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -138,10 +137,10 @@ const Problem = ({ navigation }) => {
 
             return (
               selectedStatus === status &&
-              (problems.length > 0 ? (
+              (problems?.length > 0 ? (
                 problems.map((problem, index) => (
                   <ProblemComponent
-                    key={index}
+                    key={problem.id}
                     roomName={problem.room_name}
                     status={problem.status}
                     issue={problem.problem}

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const instance = axios.create({
   baseURL: 'http://10.0.2.2:5170/api/v1/',
+  // baseURL: 'http://192.168.0.35:5170/api/v1/',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -14,9 +15,9 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async (config) => {
     try {
-      const token = await AsyncStorage.getItem('userToken'); // Lấy token từ AsyncStorage
+      const token = await AsyncStorage.getItem('userToken');
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`; // Thêm token vào header
+        config.headers.Authorization = `Bearer ${token}`; 
       }
       return config;
     } catch (error) {
@@ -36,8 +37,6 @@ instance.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      console.log('Error Response:', error.response.data);
-      console.log('Error Status:', error.response.status);
       return Promise.reject(error);
     } else if (error.request) {
       console.log('No Response from server');

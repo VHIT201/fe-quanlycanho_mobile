@@ -21,11 +21,19 @@ import DetailRoom from "./src/features/building/detailRoom/DetailRoom";
 import Services from "./src/features/services/Services";
 import Problem from "./src/features/problem/Problem";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import HomeGuest from "./src/features/guest/home/template/HomeGuest";
+import GuestBuilding from "./src/features/guest/HomeBuilding/GuestBuilding";
+import GuestDetailRoom from "./src/features/guest/room/guestDetailRoom";
 
 import useCustomFonts from "./src/assets/fonts/useFont";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FlashMessage from "react-native-flash-message"; // Import FlashMessage
 import DetailBuilding from "./src/features/building/detailBuilding/template/DetailBuilding";
+import GuestDetailBuilding from "./src/features/guest/HomeBuilding/GuestDetailBuilding";
+import CreateBooking from "./src/features/guest/room/createBooking";
+import Invoice from "./src/features/avoice/template";
+import WebViewScreen from "./src/features/avoice/components/WebViewScreen";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -188,6 +196,13 @@ const App = () => {
             <Stack.Screen name="Services" component={Services} />
             <Stack.Screen name="Problem" component={Problem} />
             <Stack.Screen name="Building" component={Building} />
+            <Stack.Screen name="HomeGuest" component={HomeGuest} />
+            <Stack.Screen name="GuestBuilding" component={GuestBuilding} />
+            <Stack.Screen name="GuestDetailBuilding" component={GuestDetailBuilding} />
+            <Stack.Screen name="GuestDetailRoom" component={GuestDetailRoom} />
+            <Stack.Screen name="CreateBooking" component={CreateBooking} />
+            <Stack.Screen name="Invoice" component={Invoice} />
+            <Stack.Screen name="WebViewScreen" component={WebViewScreen} />
           </Stack.Navigator>
           <FlashMessage position="top" />
         </NavigationContainer>

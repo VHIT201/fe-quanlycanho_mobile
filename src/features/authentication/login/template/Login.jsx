@@ -143,6 +143,9 @@ const Login = ({ navigation }) => {
         <Text style={{ textDecorationLine: 'underline', fontSize: 13, marginTop: 10, color: colors.light_black }}>
           Bạn quên mật khẩu?
         </Text>
+        <Text onPress={()=> navigation.navigate('HomeGuest')} style={{ textDecorationLine: 'underline', color:colors.primary_green ,fontSize: 13, marginTop: 10 }}>
+          Tiếp tục với tư cách khách
+        </Text>
         <View
           style={[
             generalStyles.container,

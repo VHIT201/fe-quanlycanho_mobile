@@ -3,18 +3,17 @@ import { setLoading } from '../store/stateSlice';
 import { setProblems } from '../store/problemSlice';
 
 export const createProblem = async (problemData, dispatch) => {
-    dispatch(setLoading(true));
-    try {
-        const response = await axios.post('/problem/create', problemData);
-        console.log('Response Data:', response.data);
-        dispatch(setLoading(false));
-
-    } catch (error) {
-        console.log('Error:', error);
-        dispatch(setLoading(false));
-        throw error;
-    }
+  try { // Kiểm tra dữ liệu
+    dispatch(setLoading(true)); // Bật trạng thái loading
+    await axios.post('/problem/create', problemData); // Gửi dữ liệu
+    dispatch(setLoading(false)); // Tắt trạng thái loading
+  } catch (error) {
+    console.error("Lỗi khi tạo sự cố:", error);
+    dispatch(setLoading(false)); // Tắt trạng thái loading nếu lỗi
+    throw error;
+  }
 };
+
 
 export const getAllProblem = async (dispatch) => {
     try {
